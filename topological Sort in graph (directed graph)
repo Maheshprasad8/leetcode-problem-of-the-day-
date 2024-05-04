@@ -1,5 +1,10 @@
 ***********Topological Sort***********
+A Directed Acyclic Graph (DAG) is a directed graph that contains no cycles.
+Topological Sorting of DAG is a linear ordering of vertices such that for every directed edge 
+from vertex ‘u’ to vertex ‘v’, vertex ‘u’ comes before ‘v’ in the ordering.
+Topological Sorting for a graph is not possible if the graph is not a DAG.
 
+............................................................1st method for topological Sort in directed Graph(DFS-Stack)......................
 #include <bits/stdc++.h> 
 void topoSort(int node,vector<bool>&visited,stack<int>&s,
 unordered_map<int,list<int>>&adj){
@@ -34,6 +39,44 @@ for(int i=0;i<v;i++){
         s.pop();
     }
     return ans;
+}
 
+.............................................2nd method for topological Sort in directed Graph(BFS-Queue).................................
+*********By using kahn's algorithm**************
+#include <bits/stdc++.h> 
+vector<int> topologicalSort(vector<vector<int>> &edges, int v, int e)  {
+unordered_map<int,list<int>>adj;
+for(int i=0;i<e;i++){
+    int u=edges[i][0];
+    int v=edges[i][1];
+    adj[u].push_back(v);
+  //  adj[v].push_back(u);
 
+}
+vector<int>indegree(v);
+for(auto i:adj){
+    for(auto j:i.second)
+    {
+        indegree[j]++;
+    }
+}
+queue<int>q;
+for(int i=0;i<v;i++){
+    if(indegree[i]==0){
+        q.push(i);
+    }
+}
+vector<int>ans;
+while(!q.empty()){
+    int front=q.front();
+    q.pop();
+    ans.push_back(front);
+    for(auto neighbour:adj[front]){
+indegree[neighbour]--;
+if(indegree[neighbour]==0){
+    q.push(neighbour);
+}
+    }
+}
+return ans;
 }
