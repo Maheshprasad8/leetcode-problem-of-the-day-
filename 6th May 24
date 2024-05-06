@@ -1,0 +1,32 @@
+2487. Remove Nodes From Linked List
+
+Input: head = [5,2,13,3,8]
+Output: [13,8]
+Explanation: The nodes that should be removed are 5, 2 and 3.
+- Node 13 is to the right of node 5.
+- Node 13 is to the right of node 2.
+- Node 8 is to the right of node 3.
+
+class Solution {
+public:
+    ListNode* removeNodes(ListNode* head) {
+        ListNode * curr=head;
+        stack<ListNode*>st;
+        while(curr!=NULL){
+        while(!st.empty() && st.top()->val < curr->val){
+            st.pop();
+
+        }
+        st.push(curr);
+        curr=curr->next;
+        }
+        ListNode* temp=NULL;
+        while(!st.empty()){
+            curr=st.top();
+            st.pop();
+            curr->next=temp;
+            temp=curr;
+        }
+        return curr;
+    }
+};
