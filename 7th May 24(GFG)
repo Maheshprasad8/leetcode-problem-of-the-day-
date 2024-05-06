@@ -1,0 +1,200 @@
+**Check for BST**
+Input:
+   2
+ /    \
+1      3
+Output: 1 
+class Solution
+{
+    private:
+   bool solve(Node* root,int min,int max){
+        if(root==NULL){
+            return true;
+        }
+        if(root->data > min && root->data <max){
+         bool leftAns=solve(root->left,min,root->data);
+          bool rightAns=solve(root->right,root->data,max);
+        return leftAns&&rightAns;
+        }
+        return false;
+    }
+    public:
+    //Function to check whether a Binary Tree is BST or not.
+    bool isBST(Node* root) 
+    {
+    return solve(root,INT_MIN,INT_MAX);
+    }
+};
+*******Level order traversal
+Input:
+    1
+  /   \ 
+ 3     2
+Output:
+1 3 2
+class Solution
+{
+    public:
+    //Function to return the level order traversal of a tree.
+    vector<int> levelOrder(Node* root)
+    {
+        vector<int>ans;
+     if(root==NULL){
+         return ans;
+     }
+    
+     queue<Node*>q;
+     q.push(root);
+     while(!q.empty()){
+        
+         int n=q.size();
+          vector<int>level;
+         for(int i=0;i<n;i++){
+            Node* front=q.front();
+         q.pop();
+         ans.push_back(front->data);
+         
+       if(front->left){
+           q.push(front->left);
+       }  
+       if(front->right){
+           q.push(front->right);
+       }
+       
+         }
+     }
+     return ans;
+    }
+};
+
+****Detect cycle in an undirected graph**
+V = 5, E = 5
+adj = {{1}, {0, 2, 4}, {1, 3}, {2, 4}, {1, 3}} 
+Output: 1
+Explanation: 
+1->2->3->4->1 is a cycle.
+
+class Solution {
+    private:
+    bool isCycle(int src, unordered_map<int,bool>&visited,vector<int> adj[]){
+        unordered_map<int,int>parent;
+       // int src=-1;
+        parent[src]=-1;
+        //node[src]=1
+        visited[src]=true;
+        queue<int>q;
+        q.push(src);
+        while(!q.empty()){
+            int front=q.front();
+            q.pop();
+            for(auto neightbour:adj[front]){
+                if(visited[neightbour]==true && neightbour!=parent[front]){
+                    return 1;
+                } 
+                else if(!visited[neightbour]){
+                    q.push(neightbour);
+                    visited[neightbour]=true;
+                    parent[neightbour]=front;
+                }
+            }
+        }
+        return 0;
+        
+    }
+  public:
+    // Function to detect cycle in an undirected graph.
+    bool isCycle(int V, vector<int> adj[]) {
+        unordered_map<int,bool>visited;
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+          bool ans=isCycle(i,visited,adj);
+                if(ans==1){
+                    return 1;
+                }
+                
+            }
+        }
+        return 0;
+    }
+};
+
+******Detect cycle in a directed graph
+Input:
+Output: 1
+Explanation: 3 -> 3 is a cycle
+class Solution {
+    private:
+    bool isCycle(int node,  unordered_map<int,bool>&visited,
+       unordered_map<int,bool>&dfsvisited, vector<int> adj[]){
+         visited[node]=true;
+        dfsvisited[node]=true;
+        for(auto neighbour:adj[node]){
+            if(!visited[neighbour]){
+                bool cycledetected=isCycle(neighbour,visited,dfsvisited,adj);
+                
+            
+            if(cycledetected){
+                return 1;
+                
+            }
+            }
+            else if(dfsvisited[neighbour]){
+                return 1;
+            }
+        }
+        dfsvisited[node]=false;
+        return false;
+       }
+  public:
+    // Function to detect cycle in a directed graph.
+    bool isCyclic(int V, vector<int> adj[]) {
+       unordered_map<int,bool>visited;
+       unordered_map<int,bool>dfsvisited;
+       for(int i=0;i<V;i++){
+           if(!visited[i]){
+               bool ans=isCycle(i,visited,dfsvisited,adj);
+           if(ans==1){
+               return 1;
+           }    
+           }
+           
+       }
+       return 0;
+    }
+};
+
+********TopologicalSort
+class Solution
+{
+     private:
+    void topoSort(int node,vector<bool>&vis,stack<int>&s,
+     vector<int> adj[]){
+       vis[node]=true;
+       for(auto neighbour:adj[node]){
+           if(!vis[neighbour]){
+               topoSort(neighbour,vis,s,adj);
+           }
+       }
+       s.push(node);
+     }
+	public:
+	
+	//Function to return list containing vertices in Topological order. 
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	 vector<bool>vis(V,false);
+	   stack<int>s;
+	   for(int i=0;i<V;i++){
+	       if(!vis[i]){
+	           topoSort(i,vis,s,adj);
+	           
+	       }
+	   }
+	       vector<int>ans;
+	       while(!s.empty()){
+	           ans.push_back(s.top());
+	           s.pop();
+	       }
+	        return ans;
+	}
+};
