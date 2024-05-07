@@ -1,0 +1,75 @@
+1.Reverse Level Order Traversal
+vector<int> reverseLevelOrder(Node *root)
+{
+    vector<int>ans;
+    if(root==NULL){
+        return ans;
+    }
+    queue<Node*>q;
+    q.push(root);
+    while(!q.empty()){
+        vector<int>level;
+        int n=q.size();
+        for(int i=0;i<n;i++){
+            Node* front=q.front();
+            q.pop();
+        level.push_back(front->data);
+        if(front->left){
+            q.push(front->left);
+        }
+        if(front->right){
+            q.push(front->right);
+            
+        }
+       
+        }
+     
+    ans.insert(ans.begin(), level.begin(), level.end());
+    }
+       return ans;
+    
+    
+}
+2.Count the paths
+class Solution {
+    private:
+    int countpath(vector<vector<int>>adj,int u,int d,vector<bool>&visited){
+       if(u==d){
+           return 1;
+           
+       }
+       visited[u]=true;
+       int ans=0;
+       for(auto i:adj[u]){
+           if(!visited[i]){
+               ans+=countpath(adj,i,d,visited);
+           }
+       }
+      visited[u] = false;
+return ans;
+}
+public:
+	int possible_paths(vector<vector<int>>edges, int n, int s, int d){
+	   vector<vector<int>> adj(n);
+        for (const auto& edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adj[u].push_back(v);
+        }
+	    vector<bool>visited(n,false);
+	    return countpath(adj,s,d,visited);
+	}
+};
+3.Shortest path from 1 to n
+class Solution{   
+public:
+    int minimumStep(int n){
+        int ans=0;
+        while(n>=3){
+            ans+=n%3+1;
+            n/=3;
+            
+        }
+        return ans+(n-1);
+    }
+};
