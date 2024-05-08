@@ -1,0 +1,81 @@
+8th May 24
+problem of day on leetcode & GFG
+506. Relative Ranks
+Input: score = [5,4,3,2,1]
+Output: ["Gold Medal","Silver Medal","Bronze Medal","4","5"]
+Explanation: The placements are [1st, 2nd, 3rd, 4th, 5th].
+Example 2:
+
+Input: score = [10,3,8,9,4]
+Output: ["Gold Medal","5","Bronze Medal","Silver Medal","4"]
+Explanation: The placements are [1st, 5th, 3rd, 2nd, 4th].
+class Solution {
+public:
+    vector<string> findRelativeRanks(vector<int>& score) {
+      priority_queue<pair<int,int>>pq;
+      for(int i=0;i<score.size();i++){
+        pq.push({score[i],i});
+      }  
+vector<string>ans(score.size());
+    if(!pq.empty()){
+        ans[pq.top().second]="Gold Medal";
+        pq.pop();
+
+    }
+    if(!pq.empty()){
+        ans[pq.top().second]="Silver Medal";
+        pq.pop();
+
+    }
+    if(!pq.empty()){
+        ans[pq.top().second]="Bronze Medal";
+        pq.pop();
+
+    }
+    int rank=4;
+    while(!pq.empty()){
+        ans[pq.top().second]=to_string(rank);
+        rank++;
+        pq.pop();
+    }
+    return ans;
+}   
+};
+
+Q.Root to leaf paths;
+Input:
+       1
+    /     \
+   2       3
+Output: 
+1 2 
+1 3 
+Explanation: 
+i/p:[1 2 3]
+All possible paths:
+1->2
+1->3
+class Solution {
+    private:
+    vector<vector<int>> result;
+    void solve(Node* root,vector<int>&ans){
+         //vector<int>ans;
+       if(root==NULL){
+           return ;
+       }
+       ans.push_back(root->data);
+       if(root->left==NULL && root->right==NULL ){
+           result.push_back(ans);
+       }
+      solve(root->left,ans);
+      solve(root->right,ans);
+      ans.pop_back();
+    //   return ans;
+    }
+  public:
+    vector<vector<int>> Paths(Node* root) {
+        vector<int>ans;
+       solve(root,ans);
+      return result;
+    }
+};
